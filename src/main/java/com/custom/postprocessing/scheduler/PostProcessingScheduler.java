@@ -230,7 +230,7 @@ public class PostProcessingScheduler {
 
 			for (ListBlobItem blobItem : blobList) {
 				String fileName = getFileNameFromBlobURI(blobItem.getUri()).replace(SPACE_VALUE, EMPTY_SPACE);
-				System.out.println("fileName:" + fileName);
+				logger.info("fileName:" + fileName);
 				boolean stateType = checkStateType(fileName);
 				if (stateType) {
 					if (StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(fileName), XML_TYPE)) {
