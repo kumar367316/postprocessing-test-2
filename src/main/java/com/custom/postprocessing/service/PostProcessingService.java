@@ -5,6 +5,7 @@ import static com.custom.postprocessing.constant.PostProcessingConstant.ARCHIVE_
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_PAGE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.EMPTY_SPACE;
+import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PDF_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PRINT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PROCESSED_DIRECTORY;
@@ -47,7 +48,6 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.aspose.pdf.facades.PdfFileEditor;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
@@ -59,6 +59,9 @@ import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.FTPServerUtility;
 import com.custom.postprocessing.util.PostProcessUtil;
 import com.custom.postprocessing.util.ZipUtility;
+import com.groupdocs.conversion.Converter;
+import com.groupdocs.conversion.filetypes.FileType;
+import com.groupdocs.conversion.options.convert.ConvertOptions;
 /*import com.groupdocs.conversion.Converter;
 import com.groupdocs.conversion.filetypes.FileType;
 import com.groupdocs.conversion.options.convert.ConvertOptions;*/
@@ -81,7 +84,7 @@ public class PostProcessingService {
 
 	Logger logger = LoggerFactory.getLogger(PostProcessingScheduler.class);
 
-	@Value("${blob.accont.name.key}")
+	@Value("${blob.account.name.key}")
 	private String connectionNameKey;
 
 	@Value("${blob.container.name}")
@@ -161,7 +164,7 @@ public class PostProcessingService {
 			BlobClient dstBlobClient = blobContainerClient.getBlobClient(targetDirectory + blobItem.getName());
 			BlobClient srcBlobClient = blobContainerClient.getBlobClient(blobItem.getName());
 			dstBlobClient.copyFromUrl(srcBlobClient.getBlobUrl());
-			//srcBlobClient.delete();
+			// srcBlobClient.delete();
 			moveSuccess = true;
 		}
 		return moveSuccess;
@@ -327,12 +330,14 @@ public class PostProcessingService {
 	// post processing PDF to PCL conversion
 	public void convertPDFToPCL(String mergePdfFile, String currentDate, String fileType) throws IOException {
 		try {
-			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile.toString());
-			PdfFileEditor fileEditor = new PdfFileEditor();
-			String[] files = new String[] { mergePdfFile.toString() };
-			fileEditor.concatenate(files, outputPclFile);
+
+			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile.toString()) + PCL_EXTENSION;
+			Converter converter = new Converter(mergePdfFile);
+			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
+			converter.convert(outputPclFile, convertOptions);
 			copyFileToProcessedDirectory(outputPclFile);
 			pclFileList.add(outputPclFile);
+
 		} catch (Exception exception) {
 			logger.info("Exception:" + exception.getMessage());
 		}

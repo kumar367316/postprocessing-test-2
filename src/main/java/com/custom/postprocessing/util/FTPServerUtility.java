@@ -27,11 +27,11 @@ public class FTPServerUtility {
 	private PostProcessUtil postProcessUtil;
 	
 	// file transfer to ftp server
-	public void fileTranserToFTPServer(FTPClient ftpClient, List<String> fileList,
+	public void fileTranserToFTPServer(FTPClient ftpClient, List<String> pclFileList,
 			Set<String> txtDocFileNames,String currentDate) throws IOException {
 		FileInputStream fileInputStream = null;
 		try {
-			for (String fileName : fileList) {
+			for (String fileName : pclFileList) {
 				fileInputStream = new FileInputStream(fileName);
 				ftpClient.storeFile(fileName, fileInputStream);
 				fileInputStream.close();
