@@ -5,6 +5,7 @@ import static com.custom.postprocessing.constant.PostProcessingConstant.ARCHIVE_
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.BANNER_PAGE;
 import static com.custom.postprocessing.constant.PostProcessingConstant.EMPTY_SPACE;
+import static com.custom.postprocessing.constant.PostProcessingConstant.PCL_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PDF_EXTENSION;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PRINT_DIRECTORY;
 import static com.custom.postprocessing.constant.PostProcessingConstant.PROCESSED_DIRECTORY;
@@ -48,7 +49,6 @@ import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.aspose.pdf.facades.PdfFileEditor;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
@@ -60,9 +60,9 @@ import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.FTPServerUtility;
 import com.custom.postprocessing.util.PostProcessUtil;
 import com.custom.postprocessing.util.ZipUtility;
-/*import com.groupdocs.conversion.Converter;
+import com.groupdocs.conversion.Converter;
 import com.groupdocs.conversion.filetypes.FileType;
-import com.groupdocs.conversion.options.convert.ConvertOptions;*/
+import com.groupdocs.conversion.options.convert.ConvertOptions;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -71,7 +71,6 @@ import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlobDirectory;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import com.microsoft.azure.storage.blob.ListBlobItem;
-
 /**
  * @author kumar.charanswain
  *
@@ -230,7 +229,7 @@ public class PostProcessingScheduler {
 
 			for (ListBlobItem blobItem : blobList) {
 				String fileName = getFileNameFromBlobURI(blobItem.getUri()).replace(SPACE_VALUE, EMPTY_SPACE);
-				logger.info("fileName:" + fileName);
+				System.out.println("fileName:" + fileName);
 				boolean stateType = checkStateType(fileName);
 				if (stateType) {
 					if (StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(fileName), XML_TYPE)) {
@@ -321,10 +320,10 @@ public class PostProcessingScheduler {
 				PDFMerger.setDestinationFileName(mergePdfFile);
 				PDFMerger.mergeDocuments();
 				convertPDFToPCL(mergePdfFile, currentDate, fileType);
-				txtFileNames.addAll(fileNameList);
-				updatePostProcessMap.put(fileType, fileNameList);
 				bannerFile.delete();
 				new File(mergePdfFile).delete();
+				txtFileNames.addAll(fileNameList);
+				updatePostProcessMap.put(fileType, fileNameList);
 				deleteFiles(fileNameList);
 			} catch (StorageException storageException) {
 				logger.info("file not found for processing");
@@ -350,10 +349,11 @@ public class PostProcessingScheduler {
 	// post processing PDF to PCL conversion
 	public void convertPDFToPCL(String mergePdfFile, String currentDate, String fileType) throws IOException {
 		try {
-			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile.toString());
-			PdfFileEditor fileEditor = new PdfFileEditor();
-			String[] files = new String[] { mergePdfFile.toString() };
-			fileEditor.concatenate(files, outputPclFile);
+			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
+
+			Converter converter = new Converter(mergePdfFile);
+			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
+			converter.convert(outputPclFile, convertOptions);
 			copyFileToProcessedDirectory(outputPclFile);
 			pclFileList.add(outputPclFile);
 		} catch (Exception exception) {

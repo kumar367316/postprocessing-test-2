@@ -21,9 +21,9 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>AsposeJavaAPI</id>
-			<name>Aspose Java API</name>
-			<url>https://repository.aspose.com/repo/</url>
+			<id>GroupDocsJavaAPI</id>
+			<name>GroupDocs Java API</name>
+			<url>https://repository.groupdocs.com/repo/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -37,9 +37,9 @@
 			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.aspose</groupId>
-			<artifactId>aspose-pdf</artifactId>
-			<version>17.7</version>
+			<groupId>com.groupdocs</groupId>
+			<artifactId>groupdocs-conversion</artifactId>
+			<version>22.3</version>
 		</dependency>
 
 		<dependency>
