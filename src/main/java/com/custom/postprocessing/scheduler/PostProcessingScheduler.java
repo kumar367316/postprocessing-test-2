@@ -60,9 +60,9 @@ import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.FTPServerUtility;
 import com.custom.postprocessing.util.PostProcessUtil;
 import com.custom.postprocessing.util.ZipUtility;
-import com.groupdocs.conversion.Converter;
+/*import com.groupdocs.conversion.Converter;
 import com.groupdocs.conversion.filetypes.FileType;
-import com.groupdocs.conversion.options.convert.ConvertOptions;
+import com.groupdocs.conversion.options.convert.ConvertOptions;*/
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
@@ -351,9 +351,9 @@ public class PostProcessingScheduler {
 		try {
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile) + PCL_EXTENSION;
 
-			Converter converter = new Converter(mergePdfFile);
+			/*Converter converter = new Converter(mergePdfFile);
 			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
-			converter.convert(outputPclFile, convertOptions);
+			converter.convert(outputPclFile, convertOptions);*/
 			copyFileToProcessedDirectory(outputPclFile);
 			pclFileList.add(outputPclFile);
 		} catch (Exception exception) {

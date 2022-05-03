@@ -19,13 +19,13 @@
 		<azure.version>3.14.0</azure.version>
 		<spring-cloud.version>2021.0.1</spring-cloud.version>
 	</properties>
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>GroupDocsJavaAPI</id>
 			<name>GroupDocs Java API</name>
 			<url>https://repository.groupdocs.com/repo/</url>
 		</repository>
-	</repositories>
+	</repositories>-->
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -36,11 +36,11 @@
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		<dependency>
+	<!--	<dependency>
 			<groupId>com.groupdocs</groupId>
 			<artifactId>groupdocs-conversion</artifactId>
 			<version>22.3</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

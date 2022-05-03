@@ -34,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.custom.postprocessing.util.ZipUtility;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -58,10 +59,12 @@ import com.custom.postprocessing.scheduler.PostProcessingScheduler;
 import com.custom.postprocessing.util.EmailUtil;
 import com.custom.postprocessing.util.FTPServerUtility;
 import com.custom.postprocessing.util.PostProcessUtil;
+/*
 import com.custom.postprocessing.util.ZipUtility;
 import com.groupdocs.conversion.Converter;
 import com.groupdocs.conversion.filetypes.FileType;
 import com.groupdocs.conversion.options.convert.ConvertOptions;
+*/
 /*import com.groupdocs.conversion.Converter;
 import com.groupdocs.conversion.filetypes.FileType;
 import com.groupdocs.conversion.options.convert.ConvertOptions;*/
@@ -332,9 +335,9 @@ public class PostProcessingService {
 		try {
 
 			String outputPclFile = FilenameUtils.removeExtension(mergePdfFile.toString()) + PCL_EXTENSION;
-			Converter converter = new Converter(mergePdfFile);
+			/*Converter converter = new Converter(mergePdfFile);
 			ConvertOptions<?> convertOptions = FileType.fromExtension("pcl").getConvertOptions();
-			converter.convert(outputPclFile, convertOptions);
+			converter.convert(outputPclFile, convertOptions);*/
 			copyFileToProcessedDirectory(outputPclFile);
 			pclFileList.add(outputPclFile);
 
